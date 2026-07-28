@@ -1,7 +1,7 @@
 # specforge
 
 [![CI](https://github.com/nickharris808/specforge/actions/workflows/ci.yml/badge.svg)](https://github.com/nickharris808/specforge/actions/workflows/ci.yml)
-[![tests](https://img.shields.io/badge/tests-75%20passing-brightgreen)](tests/)
+[![tests](https://img.shields.io/badge/tests-77%20passing-brightgreen)](tests/)
 [![python](https://img.shields.io/badge/python-3.9%2B-blue)](pyproject.toml)
 [![license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
@@ -182,7 +182,7 @@ a few hundred states each. Nothing here has needed optimising.
 pip install -e ".[test]" && pytest
 ```
 
-75 tests. The important ones re-derive every label independently, replay every shipped
+77 tests. The important ones re-derive every label independently, replay every shipped
 counterexample, and assert that a fabricated submission scores exactly what guessing scores.
 
 ## The portfolio
