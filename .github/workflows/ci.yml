@@ -1,0 +1,80 @@
+name: ci
+on:
+  push: {branches: [main]}
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install ruff==0.14.2
+      - run: ruff check .
+      - run: ruff format --check .
+
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        include:
+          - {os: macos-latest, python-version: "3.12"}
+          - {os: windows-latest, python-version: "3.12"}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "${{ matrix.python-version }}"}
+      - name: Install
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[test]"
+      - name: Test
+        shell: bash
+        run: pytest -q
+
+  # The generated answer key must be reproducible on a machine that has never seen it.
+  determinism:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install -e .
+      - name: The same seed must produce the same tasks, twice
+        run: |
+          specforge export --n 30 --seed 12345 -o a.jsonl
+          specforge export --n 30 --seed 12345 -o b.jsonl
+          diff a.jsonl b.jsonl || { echo "::error::generation is not deterministic"; exit 1; }
+          echo "30 tasks reproduced byte-identically"
+
+  clean-install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Install from a built wheel into a fresh environment
+        run: |
+          python -m venv /tmp/fresh
+          /tmp/fresh/bin/pip install --upgrade pip
+          /tmp/fresh/bin/pip install .
+      - name: Import and run it outside the source tree
+        run: cd /tmp && /tmp/fresh/bin/specforge run bfs --n 5 --seed 1
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install build twine
+      - run: python -m build
+      - run: twine check dist/*
+      - uses: actions/upload-artifact@v4
+        with: {name: dist, path: dist/}

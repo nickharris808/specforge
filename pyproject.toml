@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "specforge"
+version = "0.1.0"
+description = "Generate protocol-shaped verification tasks with computed ground truth. A benchmark that cannot be memorised."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Nick Harris"}]
+keywords = ["model-checking", "benchmark", "verification", "formal-methods", "llm-evaluation"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Software Development :: Testing",
+]
+# minicheck is not on PyPI, so a bare name constraint would make this uninstallable.
+# A PEP 508 direct reference resolves without an index. See build_pypi.py.
+dependencies = ["minicheck @ git+https://github.com/nickharris808/minicheck@main"]
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[project.scripts]
+specforge = "specforge.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/nickharris808/specforge"
+Issues = "https://github.com/nickharris808/specforge/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
