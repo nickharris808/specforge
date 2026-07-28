@@ -69,7 +69,12 @@ def score(submission: dict, tasks: list) -> dict:
     claimed_correct = 0
 
     for t in tasks:
-        entry = submission.get(t.id) or {}
+        entry = submission.get(t.id)
+        # A submission comes from a user or a model, so a malformed entry is expected input rather
+        # than a programmer error. Anything that is not an object is treated as NO prediction —
+        # which is the conservative reading: it claims nothing, so it is credited with nothing.
+        if not isinstance(entry, dict):
+            entry = {}
         pred = bool(entry.get("violated", False))
         tr = (
             validate_trace(t, entry.get("trace"))
