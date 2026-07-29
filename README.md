@@ -189,15 +189,38 @@ counterexample, and assert that a fabricated submission scores exactly what gues
 
 | | |
 |---|---|
-| [`minicheck`](https://github.com/nickharris808/minicheck) | the model checker that computes the ground truth here |
-| [`protocol-bench`](https://github.com/nickharris808/protocol-bench) | the fixed, human-reviewed benchmark drawn from published standards |
-| [`minicheck-mcp`](https://github.com/nickharris808/minicheck-mcp) | the checker as an MCP server, for agents |
-| [`minicheck-action`](https://github.com/nickharris808/minicheck-action) | check specs in CI, with diagrams and SARIF |
-| [`failclosed`](https://github.com/nickharris808/failclosed) | default-deny ASGI middleware for verification-gated endpoints |
-| [`polyfrac`](https://github.com/nickharris808/polyfrac) | exact rational arithmetic with Sturm root counting |
+| [`minicheck`](https://github.com/nickharris808/minicheck) | The engine: an explicit-state model checker with a CLI. Shortest counterexamples, no required dependencies. |
+| [`protocol-bench`](https://github.com/nickharris808/protocol-bench) | Published IEEE 802.11 / 3GPP procedures with ground-truth verdicts. A claimed detection must **replay**. |
+| [`specforge`](https://github.com/nickharris808/specforge) ← *you are here* | A benchmark that cannot be memorised — ground truth is *computed* by the checker, not written down. |
+| [`minicheck-mcp`](https://github.com/nickharris808/minicheck-mcp) | The checker as an **MCP server**, so an agent can verify a state machine instead of guessing. |
+| [`minicheck-action`](https://github.com/nickharris808/minicheck-action) | Model-check every spec in a repo, in CI. Diagrams in the PR, SARIF in the Security tab. |
+| [`protocol-bench-action`](https://github.com/nickharris808/protocol-bench-action) | Score a submission in CI and fail the build if a claimed detection cannot be proved by replay. |
+| [`failclosed`](https://github.com/nickharris808/failclosed) | Default-deny ASGI middleware: a gated endpoint succeeds only on an affirmative verdict. |
+| [`polyfrac`](https://github.com/nickharris808/polyfrac) | Exact polynomial and rational-function arithmetic over ℚ with Sturm real-root counting. Zero deps. |
+| [**the docs site**](https://nickharris808.github.io/verification-docs/) | The front door: why a verdict you cannot check is not a verdict, and how these compose. |
 
-One idea runs through all of them: **a verdict you cannot check is not a verdict.**
+One idea runs through all of them: **a verdict you cannot check is not a verdict** — and its
+corollary, which governs every surface here: *undetermined is not a pass.*
+
+**Try it in the browser** · [model-check a state machine](https://huggingface.co/spaces/nickh007/protocol-bench-demo) · [the specforge leaderboard](https://huggingface.co/spaces/nickh007/specforge-leaderboard)
+
+**Ground-truth data** · [protocol-bench](https://huggingface.co/datasets/nickh007/protocol-bench) · [specforge](https://huggingface.co/datasets/nickh007/specforge)
+
+## Documentation
+
+Full documentation, including the concepts guide and an honest comparison against TLA+, SPIN, Alloy
+and CBMC, is at **[https://nickharris808.github.io/verification-docs/](https://nickharris808.github.io/verification-docs/)**.
+
+## Contributing
+
+Bug reports and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). A counterexample
+that this tool gets wrong is the single most useful thing you can send.
+
+## Citing
+
+Citation metadata is in [CITATION.cff](CITATION.cff); GitHub renders a *Cite this repository* button
+from it.
 
 ## Licence
 
-MIT.
+MIT. See [LICENSE](LICENSE).
